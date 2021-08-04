@@ -20,7 +20,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions=False)
 
-music_df = pd.read_csv('DF1955.csv')
+music_df = pd.read_csv('https://raw.githubusercontent.com/mgarbvs/rym-app-data/main/DF1955.csv')
 #Date stuff
 music_df['Date'] = pd.to_datetime(music_df['Date'],infer_datetime_format = True, errors = 'coerce')
 music_df['Month'] = music_df['Date'].dt.month
