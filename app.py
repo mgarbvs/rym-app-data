@@ -13,14 +13,23 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import numpy as np
 import datetime
-import seaborn as sns
+#import seaborn as sns
 import plotly.express as px
 from dash.exceptions import PreventUpdate
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions=False)
+server = app.server 
 
-music_df = pd.read_csv('https://raw.githubusercontent.com/mgarbvs/rym-app-data/main/DF1955.csv')
+music_df = pd.read_csv('https://raw.githubusercontent.com/mgarbvs/rym-app-data/main/DF1955_utf8.csv', encoding = "utf_8")
+
+for i in range(len(music_df['Artist'])):
+    if len(music_df['Artist'][i]) > 50:
+        #print(music_df['Artist'][i] + " ")
+        music_df.loc[i,'Artist'] = music_df.loc[i,'Artist'][0:20] + "... et al."
+
+#music_df = pd.read_csv('DF1955_utf8.csv', encoding = 'utf_8')
+#music_df = pd.read_csv('https://raw.githubusercontent.com/mgarbvs/rym-app-data/main/DF1955.csv')
 #Date stuff
 music_df['Date'] = pd.to_datetime(music_df['Date'],infer_datetime_format = True, errors = 'coerce')
 music_df['Month'] = music_df['Date'].dt.month
@@ -114,8 +123,15 @@ app.layout = html.Div([
             dcc.Graph(id='g3', figure=fig_bub,style={'display': 'flex'})
         ],className="five columns" ),
 
+        html.H6('Data scraped from the top 120 albums of each year from rateyourmusic.com. Data cleaning and analysis performed with both NumPy and pandas. Graphing performed with plotly. Made by Michael Garbus.',
+            style= {'width': '70%','text-align':'center','float':'center', 'margin':'auto'}),
+        html.A("rateyourmusic", href='https://rateyourmusic.com/', target="_blank", style = {'width': '100%','display':'inline-block','text-align':'center','float':'center', 'margin':'auto'}),
+
+        
+
          
-    ]) #className="row")
+    ])
+ #className="row")
 
 ])
 
